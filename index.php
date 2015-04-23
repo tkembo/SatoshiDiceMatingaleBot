@@ -1,9 +1,9 @@
 <?php
     //start round
-    $startAmt = 100;
-    $numThrows = 1000;
-    $secret = "4aa13f8b4355885db745e9467ba4da79";
-    $payOutAddress = "12Y2jQKC5ptGxfw2HbUYAPMDqBG5dW34NG";
+    $startAmt = 100; //Satoshis
+    $numThrows = 1000; //Number of times to throw the dice
+    $secret = "<GET_THIS_SECRET_FROM_YOUR_URL>";
+    $payOutAddress = "<ENTER_YOUR_BITCOIN_ADDRESS_HERE>";
     $firstround = file_get_contents("https://session.satoshidice.com/userapi/startround.php?secret=".$secret);
    
     $json_a=json_decode($firstround,true);
@@ -29,11 +29,13 @@
                 $amtToSend = $json_b['userBalanceInSatoshis'] - $startBalance;
                 $amtToSend = $amtToSend / 10000000;
                 $withdrawURL = file_get_contents("http://session.satoshidice.com/userapi/withdraw/?secret=".$secret."&address=".$payOutAddress."&amount=".$amtToSend);
-                //$json_withdraw=json_decode($withdrawURL,true);
+                // The following line sends you your profit after your earnings double
+		$json_withdraw=json_decode($withdrawURL,true);
                 echo "<br> >>>>>>>>>>>>>>>>>>>>>>>>>>";
-               // echo "Send ".$json_withdraw['amountWithdrawn']." BTC to your Bitcoin Address";
+               	echo "Send ".$json_withdraw['amountWithdrawn']." BTC to your Bitcoin Address";
                 echo "<br> >>>>>>>>>>>>>>>>>>>>>>>>>>";
-                die("........Earnings doubled. Game over................");
+                // Uncomment the following line if you want the bot to stop after your earnings double
+		//die("........Earnings doubled. Game over................");
             }
             echo ("Result: <strong>".$json_b['bet']['result']."</strong> Balance: ".$json_b['userBalanceInSatoshis']*100000000);
             echo ($json_b['message']."<br>");
